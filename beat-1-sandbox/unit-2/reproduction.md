@@ -23,7 +23,9 @@ ChariPramod
 
 **Claim comment**
 
-Pending: the Unit 1 selected issue or staff-assigned house issue has not been supplied. No claim has been posted.
+Selected issue: [#53 — PII scrubber fails to redact parenthesized US phone numbers](https://github.com/codepath/pathreview-ai301-fa26-s1/issues/53), the same issue recorded in Unit 1.
+
+Pending: draft and skill-check the claim before posting. No claim has been posted.
 
 **Reproduction comment**
 
