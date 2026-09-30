@@ -15,8 +15,9 @@ wrong label is not graded.
 
 **Issue link**
 
-[The individual Path Review issue page. A link to the repository or the issue list
-does not satisfy this field.]
+[Issue #53 — PII scrubber fails to redact parenthesized US phone numbers](https://github.com/codepath/pathreview-ai301-fa26-s1/issues/53)
+
+Selected with AI assistance after comparing issues #53, #54, and #56. Issue #53 is open, labeled `good first issue` and `tier-1`, and provides an exact input/output example plus four targeted tests. This is the issue carried into Unit 2. The Unit 1 skill verdict and calibration fields below are still pending; this selection does not claim those runs occurred.
 
 **Verdict output**
 
