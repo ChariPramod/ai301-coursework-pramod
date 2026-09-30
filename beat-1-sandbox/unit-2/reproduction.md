@@ -15,8 +15,7 @@ label is not graded.
 
 **GitHub username**
 
-[Your GitHub username, exactly as it appears on your profile — no `@`, no profile URL. Your
-comments upstream are identified by this name.]
+ChariPramod
 
 ---
 
@@ -24,16 +23,11 @@ comments upstream are identified by this name.]
 
 **Claim comment**
 
-[Link to the comment where you claimed the issue. Use the comment's own permalink, not the
-issue page on its own. **Then paste the text of that comment underneath the link** — the
-pasted text is what this field is graded on, so copy across what you actually posted.]
+Pending: the Unit 1 selected issue or staff-assigned house issue has not been supplied. No claim has been posted.
 
 **Reproduction comment**
 
-[Link to the comment where you posted your reproduction. It must record the environment
-(OS, relevant versions, code state), steps a stranger could follow, and what you observed.
-**Then paste the text of that comment underneath the link** — the pasted text is what this
-field is graded on, so copy across what you actually posted.]
+Pending: claim first, then set up the assigned repository from its docs, reproduce the selected issue, check the complete package with the installed skill, and post the report. No reproduction result is asserted here.
 
 ## Eval iterations
 
@@ -42,28 +36,26 @@ fields.
 
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+Draft account for review; these are the runs performed with AI assistance during this session.
+
+1. Initial full harness attempt with the first rubric: all 20 calls errored (`claude exited 1`), with no valid verdicts. It printed `agreement: 0/0 scored items` and refused to write the submission transcript. This was an execution failure, not a 0/20 calibration result.
+2. Direct diagnostic using the harness prompt on pkg-20: accept, against gold reject. This was not a scored harness run. The model inferred that absent disclosure meant the policy was not triggered.
+3. Official single-item harness retry on pkg-20 with the original components, one worker: `agreement: 1/1 scored items`; reject matched gold reject. Together with the diagnostic, this showed ambiguity in the disclosure rule. The rule and evidence map were tightened to require an explicit assistance statement under a strict all-AI-use disclosure policy.
+4. Confirming full harness run with the revised installed components, two workers: `agreement: 20/20 scored items  (bar: 18/20: PASS)`. Categories: clear-accept 8/8, disclosure 1/1, no-evidence 4/4, unfollowable-comms 3/3, wrong-target 4/4. The harness wrote the adjacent eval-run.txt without manual edits.
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+pkg-20: the final rubric decided **reject**, and the gold label is **reject**. The package's repo-facts policy says: "All AI usage in any form must be disclosed, stating the tool used and the extent of the assistance". The report otherwise provides a concrete comparison: `^[[?997;2n` for a single theme versus `^[[?997;1n` for the conditional pair. Those observations support the target behavior, but neither outgoing comment includes an assistance statement. The revised conventions check therefore holds the package without pretending its technical reproduction is weak. The initial direct diagnostic had accepted the same package, which motivated making the treatment of silence explicit.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/repro-check/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+> | Repo conventions and communication | Both comments compared with repo-facts reporting requirements and contribution/AI policy, or live repository docs; Comms in the evidence guide | Meets applicable explicit reporting and disclosure requirements and communicates an independent, issue-specific account without blame, demands, or piggyback confirmation. When the repository explicitly requires disclosure of all AI assistance, the outgoing text must state the tool and extent of assistance, or explicitly state that none was used. Silence leaves compliance unclear and holds the package; do not infer no AI use from silence. No unstated policy is invented. Equivalent wording/organization is sufficient unless the repository explicitly mandates a form. | required |
+
+Draft rationale for review: The first diagnostic on pkg-20 treated absent disclosure as evidence of no AI use and accepted the package. A separate official single-item run rejected it. The wording was tightened to make silence explicitly unclear under a strict all-AI-use policy, so the outcome does not depend on an inferred absence of assistance. This is a stricter proof-of-compliance rule; it does not claim that silence proves AI was used.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+Draft trade-off for review: Requiring an explicit assistance statement under a strict disclosure policy can hold a human-only report whose author stayed silent. That false hold is accepted to make policy compliance reviewable. Repositories without an explicit disclosure requirement do not acquire one from this check. An honest cannot-reproduce remains acceptable when the report evidences the actual trigger and observed nonfailure.
 
 ---
 
