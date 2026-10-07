@@ -1,0 +1,27 @@
+**Summary (live, claim-only draft for issue #53)**
+
+Scope: the issue is in `codepath/pathreview-ai301-fa26-s1`, and the repo line in `scope.md` is filled in, so grading proceeds. The house rules don't block this claim.
+
+- **Specific claim: pass.** The claim names the issue's symptom: `(555) 123-4567` passes through `scrub()` and `detect()` while the dashed form is handled. It proposes a concrete investigation and report: post the commands and output from a local reproduction. It commits only to investigation, with no guaranteed fix or deadline. Its factual assertions match the issue text: scrub leaves the parenthesized number, and detect returns `[]`.
+- **Repo conventions and communication: pass.** `CONTRIBUTING.md` says to comment on the issue, and the draft does that. The policy has no AI-disclosure requirement, so none is invented. The draft discloses Codex and Claude assistance anyway. The tone is free of blame and demands, and it isn't a piggyback confirmation.
+- **Environment, Runnable steps, Target and evidence, Honest outcome, Navigable proof:** these need the repro report, so they are `not yet applicable: claim-only draft`. They are excluded from the verdict.
+
+**Voice-guide notes:** no rule is clearly broken.
+- Rule "Keep conclusions inside the evidence" ("Use observed results for facts, label hypotheses"): "why `(555) 123-4567` passes through `scrub()` and `detect()`" states the issue's report as established fact before you have run anything. Consider "the issue reports that…" or "I'll check whether…". This is a wording tweak and doesn't affect the verdict.
+- Rule "Name the behavior" is met, and so are "Promise an investigation", "Bring my own proof" and the disclosure rule.
+
+```json
+{
+  "item": "https://github.com/codepath/pathreview-ai301-fa26-s1/issues/53",
+  "checks": [
+    {"name": "Specific claim", "grade": "pass", "evidence": "Names `(555) 123-4567` passing through scrub()/detect() vs dashed form, and proposes posting commands and output from a local reproduction; no fix or deadline promised"},
+    {"name": "Environment", "grade": "unclear", "evidence": "not yet applicable: claim-only draft"},
+    {"name": "Runnable steps", "grade": "unclear", "evidence": "not yet applicable: claim-only draft"},
+    {"name": "Target and evidence", "grade": "unclear", "evidence": "not yet applicable: claim-only draft"},
+    {"name": "Honest outcome", "grade": "unclear", "evidence": "not yet applicable: claim-only draft"},
+    {"name": "Repo conventions and communication", "grade": "pass", "evidence": "CONTRIBUTING.md has no AI-disclosure mandate; draft states Codex/Claude assistance anyway, is independent and issue-specific, with no blame or demands"},
+    {"name": "Navigable proof", "grade": "unclear", "evidence": "not yet applicable: claim-only draft"}
+  ],
+  "verdict": "accept"
+}
+```

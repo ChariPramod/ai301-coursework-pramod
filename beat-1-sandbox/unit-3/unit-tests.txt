@@ -1,0 +1,22 @@
+x..........xx.....x.............x.xxx.x...x..x...x......x....x.......... [ 16%]
+.x...........................................x.......................... [ 33%]
+..........x........................x.................................... [ 50%]
+.............................x........x.....x........................x.. [ 66%]
+..............xx.x..xx...xxxxx...xxx.xxx.xx.....................x....... [ 83%]
+..............x....xx..xx.......x...............x.x..................... [100%]/Users/pramodkrishnachari/Documents/Codex/2026-09-29/unit-2-reproduce-it-and-teach/work/pathreview/.venv/lib/python3.14/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+
+=============================== warnings summary ===============================
+core/config.py:7
+  /private/tmp/ai301-pathreview-pramod/core/config.py:7: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class Settings(BaseSettings):
+
+tests/unit/test_semantic_chunker.py::TestSemanticChunker::test_empty_input_returns_empty_list
+  /Users/pramodkrishnachari/Documents/Codex/2026-09-29/unit-2-reproduce-it-and-teach/work/pathreview/.venv/lib/python3.14/site-packages/urllib3/util/ssl_match_hostname.py:20: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+    class CertificateError(ValueError):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+383 passed, 49 xfailed, 2 warnings in 8.86s

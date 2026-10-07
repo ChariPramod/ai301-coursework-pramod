@@ -1,0 +1,1020 @@
+{
+  "rubric": "/Users/pramodkrishnachari/.claude/skills/plan-check/rubric.md",
+  "evidence": "/Users/pramodkrishnachari/.claude/skills/plan-check/references/evidence-guide.md",
+  "procedure": "/Users/pramodkrishnachari/.claude/skills/plan-check/procedure.md",
+  "model": "sonnet",
+  "agreement": [
+    18,
+    20
+  ],
+  "results": [
+    {
+      "id": "pkg-01",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Repro step 4: error raised by argparse parse_args, items never reach HTTPie's item parser; step 2 control parses the same items without -v; plan blames the tokenizer and calls the version difference a red herring."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Tokenizer regex rewrite has no role in the reproduced defect; Scope explicitly excludes argparse and flag handling, where the failure occurs."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "'Extend the item-separator regex to accept item tokens that follow an optional flag' names a location but a change there cannot affect tokens the tokenizer never receives."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "Tokenizer unit tests for 'header1:xyz' and 'x=1' bypass the argparse path where the failure occurs; they would pass before and after the fix."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Comment states 'the root cause is httpie's own request-item tokenizer' and 'the version difference is a side effect' as fact, contradicting repro steps 2-4, with no verification step."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "Comment asserts an unsupported root cause as settled and ignores the repro and thread (argparse behavior varying by Python version); no AI policy in the repo facts, so none was invented."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Short plan with Diagnosis, Scope, Files, Approach and Test plan sections; cause, change and verification are easy to connect."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "wrong-cause",
+      "calibration": false
+    },
+    {
+      "id": "pkg-02",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Underflow in the line-934 fill fits both controls: width 2 has no overshoot, and width 1 without --highlight-line has no background fill/subtraction."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Two saturating clamps in src/printer.rs plus one test; 'Not in scope: redesigning wide-char wrapping'; other sites only audited and noted, not fixed."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names src/printer.rs print_line, the line 934 fill, and the mechanism (saturating_sub, fill length 0 on overshoot)."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs the exact width-1 --highlight-line repro expecting exit 0 vs 101, re-runs both controls, adds a width-1 integration test."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Admits the width-1 visual result stays imperfect; flags other underflow sites as an unverified risk with a grep step; claims no completed fix or tests."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "No thread comments and no stated AI policy in CONTRIBUTING.md, so nothing to violate; the comment is specific, independent and blame-free."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Cause, change and verification are connected concisely in both plan and comment."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-03",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Repro: gzip reads `-10.txt.gz` as options (`invalid option -- '1'`) while the control `normal.txt.gz` searches fine; the plan's 'filename in option position' cause fits both."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Change is only appending `--` before the file path; shell quoting, tool choice and matching logic are explicitly out of scope."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names `crates/cli/src/decompress.rs` command builder and the exact operation; unverified tools get a manpage check plus an open-question note in the PR."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs `rg -z sometext` on the dash-named fixture expecting a match from `-10.txt.gz`, exit 0, control still matches, and adds a dash-named integration fixture."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Separates 'verified gzip, xz, zstd locally' from 'will verify the remaining three'; no unsupported completion or universal claims."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "Comment acknowledges #3224 and PR #3314 ('not to race it'), states AI-assisted with review and 'in my own words', matching the AI policy."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Plan and comment connect cause, one-line change and verification concisely."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-04",
+      "verdict": "reject",
+      "failed_checks": [
+        "Bounded repair",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Cause (fzf keeps reading console input during execute) fits the repro: keys 'jkq' reappear in fzf's prompt and `less {} > /dev/tty` works; it matches the maintainer's pointer to light_windows.go."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Repro expects 'keys reach less without a redirection workaround'; the docs-only plan declares input handling 'not in scope', so no edit addresses the supported cause, and it adds a wiki FAQ outside the repo change."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names the man page execute section and README execute examples as locations, with a concrete change (add the `> /dev/tty` note)."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "Test plan only follows the new docs and confirms the redirected form works (already shown by the control run); it never reruns the failing no-redirection scenario."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Repro covers only Git Bash/MSYS2, but the plan writes a generic 'Windows note' for `> /dev/tty`, and the comment says docs 'should stop people from losing sessions' while a confirmed bug remains."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "Maintainer identified light_windows.go as the culprit and posted patched binary 8916cbc, noting the first-key swallow remains; the plan and comment never respond to this and exclude input-handling changes."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Short plan connects diagnosis, doc edits and test in order, though the approach itself is wrong."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "thread-convention",
+      "calibration": false
+    },
+    {
+      "id": "pkg-05",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Freshness derived only from cached notices' expires_at matches repro step 4 (no request while A unexpired) and step 5 control (cache deleted -> A and B print, second request)."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Single change: max-age cap in get_notice_response_from_cache() using NOTICES_DECORATOR_DISPLAY_INTERVAL; display cadence, protocol and storage format explicitly out of scope."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names cache.py, the function and the constant; mechanism is age from the cache file's timestamp, stale when above 24h even if notices are unexpired."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs the repro with the cache backdated 25h: step 4 must fetch and print A and B (second access-log request); un-backdated must stay cached; unit tests cover stale, fresh and expiry paths."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Comment says it will report back 'once the tests pass locally'; no completed-test claim; risk of one extra request per channel per 24h is stated."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "Implements the direction agreed in the thread (constant wired into get_notice_response_from_cache()); the supplied AI policy requires no disclosure, so none is demanded."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Diagnosis, scope, files, approach and test plan connect in a short, direct plan and comment."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-06",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Honest claims",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Cause is only the reporter's 'suspects' (issue); repro shows a swallowed export error and no layout comparison, and the plan has no verification step before building on it."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Containerd bump to 1.7.28 ('old patch series anyway'), a unified abstraction across three runtimes, and a CI matrix have no demonstrated role in the reproduced defect."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "'Unified image-operations abstraction' and 'regenerate preloads in native layout' leave central design choices undefined, with no concrete locator or mechanism."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Test plan re-runs repro steps 2 and 3 on a preloaded image, expecting `file` to show a POSIX tar, plus a CI matrix across runtimes."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Comment says 'traced it to the preload structure mismatch' and 'removes the whole class', but the repro only shows a swallowed export error."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "No AI policy in repo facts; plan item 4 addresses nirs's note that errors are not reported; the comment is respectful and specific."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Five loosely related changes make the cause, change and verification link hard to follow (preferred, no verdict effect)."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "scope-creep",
+      "calibration": false
+    },
+    {
+      "id": "pkg-07",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Honest claims"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Repro control 3 shows instance-method friendly errors print in the same build, contradicting the plan's claim that FES is tree-shaken out of the bundle; thread cause (_friendlyError only on Vector.prototype, static this is the constructor) is ignored."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Plan changes rollup config and adds a CI bundle assertion for an unsupported cause, and declares the Vector class out of scope though that is where the defect lies."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "Marking the FES module as side-effectful in rollup.config.mjs cannot make _friendlyError available on the static Vector path, so the steps cannot produce the intended behavior."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Test plan loads the issue's snippet against the local build and expects the friendly error message instead of the TypeError."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Comment asserts 'The root cause is the 2.x build pipeline tree-shaking the friendly error system' as certain, contradicted by the repro control, with no verification step."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "AI policy does not require disclosure of all assistive use, so none is demanded; the comment is an independent plan, no blame, and no completion claim; the maintainer comment only invites help."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Short plan and comment connect stated cause, change and verification without extra material."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "wrong-cause",
+      "calibration": false
+    },
+    {
+      "id": "pkg-08",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Cause (adjacency grouping in delpaths_sorted broken by mixed-sign non-leaf indices) fits the repro controls: all-positive and all-negative variants work, only mixed-sign fails."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Only the grouping in delpaths_sorted plus jq.test regression cases; tombstone rework explicitly deferred as out of scope."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names src/jv_aux.c delpaths_sorted and the mechanism: normalize negative indices against array length at each level before grouping; out-of-range case defined as matching leaf behavior with a pinning test."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs the three repro commands expecting [[0,1,2,3,5,7,8,9]], keeps the two controls unchanged, and runs the existing suite including the line ~1184 simultaneous-deletion case."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Diagnosis cited as matching the thread and controls; tests are described as planned, not done; the out-of-range risk is stated with a concrete handling step."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "Repo facts show no AI policy, so none is required. Comment acknowledges PRs #3543/#3548 and the tombstone discussion and offers to contribute tests to those PRs. It claims no unsupported completion."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Plan and comment connect cause, change and verification concisely, in the same order."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-09",
+      "verdict": "reject",
+      "failed_checks": [
+        "Honest claims"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Regex-mode control matches backslash paths and Linux matches, so the `/`-only glob-derived regex run against raw native paths explains the failure."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Only the Windows-gated glob full-path match site changes; option 1 and regex-mode changes are explicitly deferred."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names src/walk.rs match site and the concrete operation: map `\\` to `/` in candidate bytes for matching only, Windows-gated."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs repro steps 2 and 3 expecting `C:\\t\\fixture\\src\\foo\\a.spec.ts`, plus regex and Linux controls; the 'double-backslash form' is not in the repro and should be clarified."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Plan says 'the collaborator noted [option 2] is the simpler route', but in the thread it was petrroll (NONE) who said that; tmccombs only listed options. This claims maintainer agreement the evidence doesn't support."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "Comment follows the option-2 discussion and acknowledges PR #2089; the AI policy has no disclosure ask for issue comments, so none is required."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Cause, change, files, test and risk are laid out in a short, linked sequence."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-10",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Thread and contribution fit",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Plan names no cause; says 'git modules clearly have performance problems' while repro isolates git_status (1873ms) vs git_branch (41ms) and 5x overhead vs raw git status; scoop angle has no control."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Steps are 'optimize whatever the profiling turns up', caching between prompts and 'spawning fewer git subprocesses in general', none tied to a supported cause."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "No file, function or mechanism named; central design choice left as 'profile and optimize'."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "Test plan is 'prompt should feel fast' and 'starship timings should look much better', with no repro repo, number or threshold."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Unknowns are framed as investigation steps; 'numbers above' match the repro evidence; no completed testing or certainty is claimed."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "No maintainer direction or AI policy in the evidence, but the comment gives no specific plan: 'investigate\u2026 explore caching\u2026 optimize whatever shows up hot'."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Cause, change and verification cannot be connected from the plan or comment."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "unbuildable",
+      "calibration": false
+    },
+    {
+      "id": "pkg-11",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Honest claims"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Plan blames collect, but the repro control shows top-level `[.a]` yields [null]; only select/and/or contexts drop the key (thread: DontAutoCreate via SingleReadonlyChildContext)."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Plan excludes select/and/or from scope and changes collect to 'always contribute null regardless of where the collect appears', which does not target the context flag that is the supported cause."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "Targets operator_collect.go, which is not where the key is dropped, and never explains how collect would synthesize null; traverseMap/DontAutoCreate are not mentioned."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs the issue's three commands with expected outputs 1, {}, true and adds scenarios for `[.a]` over `{}` inside and outside conditions."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Comment states 'Investigated this: the collect operator... is dropping the missing key' as fact, contradicting the control, with no verification step."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "No AI policy or maintainer direction in the repo facts or thread; the comment is specific, independent and makes no completion claim."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Short plan and comment where cause, change and test connect, although the cause itself is wrong."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "wrong-cause",
+      "calibration": false
+    },
+    {
+      "id": "pkg-12",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Plan only says 'accumulated special cases'; names no cause tied to the column-0 closing line, no verification step, and ignores the thread note that HTML is identical across four parsers."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Changes 1-4 rewrite wrapping, unify lists/blockquotes/footnotes, alter proseWrap, add a markdownIndentAdjust option, and split the printer into modules; none is tied to the reproduced defect."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "'New width-aware wrapping algorithm\u2026 continuation indent as a first-class concept' leaves the central design choice unspecified; no mechanism, and the new option's behavior is undefined."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "Test plan says the repro 'formats with the indent preserved' and the suite 'passes after snapshot updates'; no exact expected output, and updating snapshots can mask regressions."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Comment claims it 'fixes the class rather than the instance' with no evidence of a class of bugs; the diagnosis is presented as settled."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "No AI-use disclosure despite the repo's AI usage policy, and no response to tats-u's thread note; the proposed scope far exceeds the issue."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Cause, change and verification are not connected; the plan describes a broad refactor with no link to the observed defect."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "scope-creep",
+      "calibration": false
+    },
+    {
+      "id": "pkg-13",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Stale viewport offset clamped to top plus missing invalidation fits the top jump, the blanking until resize, DHowett's invalidation-bug note and the alacritty control."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Scope limited to the EraseInDisplay scrollback branch and its invalidation; mouse-selection issue and scrollback redesign explicitly deferred."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names AdaptDispatch::EraseInDisplay and gives concrete steps: re-anchor the viewport to the mutable viewport, then invalidate the full visible region."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Re-runs the repro script; the viewport must snap to the bottom and no region may render blank without a resize; plus an adapter unit test with an offset viewport."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Clamp layer explicitly stated as unverified and to be confirmed; no completed-test claims."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "Comment addresses the maintainer's invalidation-bug observation and defers the thread's other symptom; repo facts state no AI policy, so no disclosure is required."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Plan and comment connect cause, change and verification concisely."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-14",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Buildable approach",
+        "Honest claims"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Cache control (one clean attach after rm -rf ~/.cache/zellij, then leak returns) is not explained by a stdin-wiring/drain-order cause; plan only asserts 'the color data is refetched along the fresh-attach path once' and defers cache behavior, with no verification step before edits."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Single change to the Unix reattach handshake; Windows variant and theme-detection caching explicitly deferred with reasons."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "Targets are only crate-level areas; 'exact functions to be pinned in the PR after tracing' and the OSC-pattern drain mechanism are left undefined, so the core design is unresolved."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "5 consecutive SSH reattach cycles with no rgb strings, fresh-create still clean, 0.44.1 parity, and cache control must become always clean."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Asserts 'reattach-path change in 0.44.2' and reattach-time OSC queries as fact without evidence; comment claims 0.44.2 was reproduced as leaking though the repro ran on 0.44.3 and 0.44.1 only."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "pass",
+          "evidence": "No AI policy in repo facts so no disclosure required; comment engages thread's Windows and cache observations, specific independent plan, no blame."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Cause, scope, change, test and risk are laid out in a concise connected sequence."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-15",
+      "verdict": "reject",
+      "failed_checks": [
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Repro controls 4 vs 5 flip outcome by timeout alone (500ms succeeds 10/10, 250ms fails 8/10); plan's diagnosis matches"
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Changes 2-5 (undici migration, Settings field, UI error surfacing for #12810, retry wrapper) have no role in the reproduced 250ms timeout defect"
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "Startup location is only 'App startup'; 'replace node-fetch with undici across the desktop sync code' leaves central design choices unspecified"
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "Slow-connect 10/10 covers the core fix, but no compatibility test accompanies the undici replacement or retry wrapper, which directly threaten existing sync behavior"
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "'undici handles Happy Eyeballs natively' is unsupported; 'covers the whole failure surface' overclaims"
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "mrjo118 already pushed the 500ms default; comment proposes a PR series starting with an undici migration instead of verifying that fix"
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Cause, change and verification do not connect for items 2-5; preferred, does not affect verdict"
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "scope-creep",
+      "calibration": false
+    },
+    {
+      "id": "pkg-16",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Plan blames the post-read astype, but repro step 4 shows pyarrow inference already yields int64 1 before any cast; step 3 and the thread put the loss in the typed parse."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Edits are confined to the post-read cast and exclude pyarrow reader options, so they do not address the supported cause (inference at parse time)."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "Re-padding to 'max digit count plus the pad the CSV used' cannot recover zeros already lost (0150 vs 150 are indistinguishable as integers); the central mechanism is unexplained."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "Test plan is 'example matches python engine; parser suite passes' with no concrete input/expected values, and names test_read_fwf.py, which does not cover the pyarrow CSV path."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "States 'The cast is where the data is damaged' and 'worked through this end to end' with certainty, contradicted by repro step 4; no verification step for the cause."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "Comment ignores jorisvandenbossche's explanation and dxdc's column_types direction, proposing the opposite fix; no AI policy exists in the repo facts, so none is demanded."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Plan and comment are short and cause, change and verification line up readably (preferred; does not affect verdict)."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "wrong-cause",
+      "calibration": false
+    },
+    {
+      "id": "pkg-17",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Thread and contribution fit",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "No cause proposed; plan only says 'mouse handling clearly changed somewhere between 0.61 and 0.62' and ignores the mouse on/off and 0.61.1 controls as discriminators."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "No concrete edit named; 'Try different mouse protocols' and 'Fix the scrolling once the cause is clear' leave scope undefined."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "'gocui? tcell? not sure which layer is responsible' - no file, function or mechanism; the central design choice is deferred."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "'scrolling should work correctly under tmux afterwards, and nothing else should feel broken' omits the mouse-on trigger and any observable expected result."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "Unknowns are stated as unknown ('not sure which layer'), no tests are claimed as done, and the 0.61 vs 0.62 change is supported by the repro control."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "Comment references the mouse-on isolation but gives no specific plan ('investigate the input stack... experiment with the mouse protocols'); no AI-disclosure rule exists to violate."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Cause, change and verification cannot be connected because the plan has none of them concretely."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "unbuildable",
+      "calibration": false
+    },
+    {
+      "id": "pkg-18",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "Plan states no cause and frames it as iter.Seq2 handling, while the control (defer moved out of loop passes) and ldez's comment point to defer-in-loop."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "Blanket recover() around all linter execution and 'check other linters while at it' have no demonstrated role in the supported cause."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "'Somewhere around linter execution' and 'upstream or vendored, whichever is easier' leave the location and central design choice undecided."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "'Should not panic on the reproduction anymore' names no trigger or expected output; a recover() would pass it without fixing the cause."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "Asserts 'a linter runner should never crash' as justification and treats upstream-versus-vendored as a convenience choice with no step to check the open fix PRs."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "Comment ignores ldez's direction and the already-open upstream PRs (sqlclosecheck#50, rowserrcheck#34), and proposes duplicate work."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Cause, change and verification are not connected; the plan is vague and mixes unrelated steps."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "unbuildable",
+      "calibration": false
+    },
+    {
+      "id": "pkg-19",
+      "verdict": "reject",
+      "failed_checks": [
+        "Grounded diagnosis",
+        "Bounded repair",
+        "Buildable approach",
+        "Discriminating test",
+        "Honest claims",
+        "Thread and contribution fit",
+        "Easy to review"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "fail",
+          "evidence": "No specific cause is named; the Background blames general 'organic' bookkeeping, though the control shows only the custom appear-to class leaks."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "fail",
+          "evidence": "The plan adds a state machine, a persistClass prop, a TransitionGroup port and a test migration, none supported by the repro."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "fail",
+          "evidence": "The approach rebuilds a whole lifecycle and never says which removal condition changes for custom appear-to classes."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "fail",
+          "evidence": "The test plan says the class 'is removed' and that migrated suites pass on a new harness, with no trigger, timing or assertion."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "fail",
+          "evidence": "'Makes this whole class of leak unrepresentable' is an unsupported universal claim."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "fail",
+          "evidence": "It ignores the maintainer's 'works as intended' comment and proposes a sweeping RFC-scale change plus a new public prop."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "fail",
+          "evidence": "Cause, change and verification do not connect, and the change touches most of the transition code."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "scope-creep",
+      "calibration": false
+    },
+    {
+      "id": "pkg-20",
+      "verdict": "reject",
+      "failed_checks": [
+        "Thread and contribution fit"
+      ],
+      "checks": [
+        {
+          "name": "Grounded diagnosis",
+          "grade": "pass",
+          "evidence": "Repro control (hyperlink start removed passes) isolates growth-during-print; stale `prev` after realloc fits the zeroed-cell assert at page.zig:1487."
+        },
+        {
+          "name": "Bounded repair",
+          "grade": "pass",
+          "evidence": "Scope limited to Terminal.print grapheme paths plus a page generation counter; unconditional recompute and wider refactors explicitly excluded; other-pointer question deferred."
+        },
+        {
+          "name": "Buildable approach",
+          "grade": "pass",
+          "evidence": "Names Terminal.print and the page, with a concrete mechanism: generation counter bumped on realloc, snapshot beside prev, recompute from pin when it moves."
+        },
+        {
+          "name": "Discriminating test",
+          "grade": "pass",
+          "evidence": "Both issue test cases plus the no-hyperlink control become regression tests; the panic goes away and the control is unchanged; the #11249 corpus is re-run."
+        },
+        {
+          "name": "Honest claims",
+          "grade": "pass",
+          "evidence": "States 'I have not yet measured the per-print cost' and flags the open question on other cached pointers; no completed-test claims."
+        },
+        {
+          "name": "Thread and contribution fit",
+          "grade": "unclear",
+          "evidence": "AI_POLICY requires disclosing tool and extent (or explicitly no AI use); neither the plan nor the comment contains any disclosure, and silence is unclear under the rubric."
+        },
+        {
+          "name": "Easy to review",
+          "grade": "pass",
+          "evidence": "Plan and comment connect cause, change and verification concisely."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "thread-convention",
+      "calibration": false
+    }
+  ]
+}

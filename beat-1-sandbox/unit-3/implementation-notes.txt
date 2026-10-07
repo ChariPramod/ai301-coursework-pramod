@@ -1,0 +1,32 @@
+I made the edits in `safety/pii_scrubber.py` and `tests/unit/test_pii_scrubber.py`. I haven't run anything, so none of it is tested. `plan.md` and `comment.md` are untouched, and nothing is committed or pushed.
+
+**`safety/pii_scrubber.py`** (only `phone_us` changed)
+- Old: `\b(?:\+?1[-.]?)?\(?([0-9]{3})\)?[-.]?([0-9]{3})[-.]?([0-9]{4})\b`
+- New: `(?<!\w)(?:\+?1[-. ]?)?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})(?!\w)`
+- **Separators:** every separator class now includes a literal space, including the one after `1`/`+1`. I didn't use `\s`, so a number can't join across newlines.
+- **Parentheses and `+1`:** the leading `\b` is now `(?<!\w)`. The match can start at `(` or `+`, so the parentheses and `+1` are consumed. It still can't start inside an alphanumeric or underscore run.
+- **Trailing boundary:** `\b` is now `(?!\w)`, so a longer digit run or identifier suffix blocks the match.
+- **Boundary character class:** I used `\w` rather than `[A-Za-z0-9]` to keep the old `\b` behaviour of treating `_` as an identifier character. It also treats non-ASCII letters as identifier characters. Tell me if you want strictly `[A-Za-z0-9]`.
+
+**`tests/unit/test_pii_scrubber.py`**
+- **xfail markers:** I removed the four strict xfail decorators on `test_us_phone_number_redaction`, `test_us_phone_formats`, `test_detect_phone_pii` and `test_phone_at_start_of_text`. `test_mixed_pii_and_text` keeps its marker and is otherwise unchanged.
+- **Exact scrub output:** `test_us_phone_number_redaction` now asserts `== "Call me at [REDACTED]"`. `test_us_phone_formats` asserts `== "Contact: [REDACTED]"` for each format, and I added `(555)123-4567` and `5551234567` to its list.
+- **`test_detect_phone_pii`:** it now filters to `phone_us` and asserts one record with value `(555) 123-4567`, start 7 and end 21.
+- **`test_phone_at_start_of_text`:** it now asserts the exact scrub output `[REDACTED] is my phone number.` and the `phone_us` record's value, start 0 and end 14.
+- **New positive tests:**
+  - `test_us_phone_number_redaction_alongside_dashed` checks the issue's exact input.
+  - `test_us_phone_without_space_keeps_no_leftover_paren` checks that no `(` is left behind.
+  - `test_detect_phone_positions_by_format` checks `phone_us` value, start and end for five formats, including `+1 555 123 4567`.
+- **New negative test:** `test_us_phone_negative_cases_unchanged` covers:
+  - 11- and 13-digit runs
+  - `555-123-45678`
+  - `abc…` and `…abc` neighbours
+  - `ID_555-123-4567`
+  - three newline-split forms
+
+  Each case must scrub to unchanged text and produce no `phone_us` detection.
+
+**For your review**
+- The new tests assert on `phone_us` records only, as the plan says, so they don't depend on `phone_intl` overlap for `+1` inputs.
+- `+1 555 123 4567` is redacted by `phone_us` before `phone_intl` runs. I expect `scrub()` to give a clean `[REDACTED]`, but I haven't confirmed that by running it.
+- The plan's "Deviations" section still says "Not built yet". I left it alone because I wasn't to touch `plan.md`.

@@ -25,11 +25,67 @@ ChariPramod
 
 Selected issue: [#53 — PII scrubber fails to redact parenthesized US phone numbers](https://github.com/codepath/pathreview-ai301-fa26-s1/issues/53), the same issue recorded in Unit 1.
 
-Pending: draft and skill-check the claim before posting. No claim has been posted.
+https://github.com/codepath/pathreview-ai301-fa26-s1/issues/53#issuecomment-6030114975
+
+I'd like to work on #53 for AI301. I'll check why `(555) 123-4567` passes through `scrub()` and `detect()` while the dashed form is handled, then post the commands and output from my local reproduction before proposing a fix.
+
+I'm using Codex to help inspect the code, run checks, and draft the report, and Claude to check the drafts against my course rubric.
 
 **Reproduction comment**
 
-Pending: claim first, then set up the assigned repository from its docs, reproduce the selected issue, check the complete package with the installed skill, and post the report. No reproduction result is asserted here.
+https://github.com/codepath/pathreview-ai301-fa26-s1/issues/53#issuecomment-6030129402
+
+Reproduced on my fork at `f89c06fc3ff292df2a04a39ac51319d32a76b779` (macOS 26.6.2, arm64; Python 3.14.7; structlog 26.1.0).
+
+I followed the Python dependency steps from the Makefile used by `docs/SETUP.md`:
+```sh
+git clone https://github.com/ChariPramod/pathreview-ai301-fa26-s1.git
+cd pathreview-ai301-fa26-s1
+git checkout f89c06fc3ff292df2a04a39ac51319d32a76b779
+python3 -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+```
+This is a scoped setup: I did not start Docker, run migrations, install the frontend or configure an AI API key. This reproduction imports the Python scrubber directly and uses no backing services. I am not claiming the full application works in this environment.
+
+Run this from that checkout:
+```sh
+.venv/bin/python - <<'PYTHON'
+import platform
+from importlib.metadata import version
+from safety.pii_scrubber import PIIScrubber
+
+print(f'OS: {platform.system()} {platform.mac_ver()[0]}; arch: {platform.machine()}')
+print(f'Python: {platform.python_version()}; structlog: {version("structlog")}')
+s = PIIScrubber()
+print(s.scrub('Call me at (555) 123-4567 or 555-123-4567'))
+print(s.detect('Call me at (555) 123-4567'))
+print('No-space control:', s.scrub('(555)123-4567'))
+PYTHON
+```
+Actual output:
+```text
+OS: Darwin 26.6.2; arch: arm64
+Python: 3.14.7; structlog: 26.1.0
+Call me at (555) 123-4567 or [REDACTED]
+2026-10-06 20:11:44 [info     ] pii_detected                   count=0 types=0
+[]
+No-space control: ([REDACTED]
+```
+Expected: `Call me at [REDACTED] or [REDACTED]`, and a `phone_us` detection whose value is `(555) 123-4567` (start 11, end 25).
+
+The dashed number is a working control; the parenthesized number is left visible and detection returns `[]`. The no-space control also leaves the opening `(` behind. Reading `phone_us`, the separator accepts dash/dot but no space, and the leading word boundary cannot start at `(` following whitespace or at the beginning of the string. These are the mechanisms I plan to check in the fix, not a claim about all phone-number formats.
+
+Related tests:
+```sh
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest tests/unit/test_pii_scrubber.py -q
+```
+```text
+..xx.......x.....x....x..                                                [100%]
+20 passed, 5 xfailed in 2.71s
+```
+I disabled automatic third-party pytest plugins for this focused run after the default invocation stalled at startup. The actual repository tests and scrubber are unchanged. The four phone tests named by the issue are expected failures; the fifth is `test_mixed_pii_and_text`, which also exercises the separate address matcher. I will keep that unrelated behavior outside this phone fix.
+
+Codex helped inspect the code, execute the reproduction and draft this report. Claude checked the outgoing package with my repro-check skill.
 
 ## Eval iterations
 
@@ -38,7 +94,7 @@ fields.
 
 **Run history**
 
-Draft account for review; these are the runs performed with AI assistance during this session.
+These are the runs performed with AI assistance.
 
 1. Initial full harness attempt with the first rubric: all 20 calls errored (`claude exited 1`), with no valid verdicts. It printed `agreement: 0/0 scored items` and refused to write the submission transcript. This was an execution failure, not a 0/20 calibration result.
 2. Direct diagnostic using the harness prompt on pkg-20: accept, against gold reject. This was not a scored harness run. The model inferred that absent disclosure meant the policy was not triggered.
@@ -53,11 +109,11 @@ pkg-20: the final rubric decided **reject**, and the gold label is **reject**. T
 
 > | Repo conventions and communication | Both comments compared with repo-facts reporting requirements and contribution/AI policy, or live repository docs; Comms in the evidence guide | Meets applicable explicit reporting and disclosure requirements and communicates an independent, issue-specific account without blame, demands, or piggyback confirmation. When the repository explicitly requires disclosure of all AI assistance, the outgoing text must state the tool and extent of assistance, or explicitly state that none was used. Silence leaves compliance unclear and holds the package; do not infer no AI use from silence. No unstated policy is invented. Equivalent wording/organization is sufficient unless the repository explicitly mandates a form. | required |
 
-Draft rationale for review: The first diagnostic on pkg-20 treated absent disclosure as evidence of no AI use and accepted the package. A separate official single-item run rejected it. The wording was tightened to make silence explicitly unclear under a strict all-AI-use policy, so the outcome does not depend on an inferred absence of assistance. This is a stricter proof-of-compliance rule; it does not claim that silence proves AI was used.
+The first diagnostic on pkg-20 treated absent disclosure as evidence of no AI use and accepted the package. A separate official single-item run rejected it. The wording was tightened to make silence explicitly unclear under a strict all-AI-use policy, so the outcome does not depend on an inferred absence of assistance. This is a stricter proof-of-compliance rule; it does not claim that silence proves AI was used.
 
 **Trade-offs**
 
-Draft trade-off for review: Requiring an explicit assistance statement under a strict disclosure policy can hold a human-only report whose author stayed silent. That false hold is accepted to make policy compliance reviewable. Repositories without an explicit disclosure requirement do not acquire one from this check. An honest cannot-reproduce remains acceptable when the report evidences the actual trigger and observed nonfailure.
+Requiring an explicit assistance statement under a strict disclosure policy can hold a human-only report whose author stayed silent. That false hold is accepted to make policy compliance reviewable. Repositories without an explicit disclosure requirement do not acquire one from this check. An honest cannot-reproduce remains acceptable when the report evidences the actual trigger and observed nonfailure.
 
 ---
 
