@@ -23,3 +23,11 @@ Eval: compare plan/comment assertions with repro artifacts and thread facts. Liv
 ## Comms
 
 Eval: read repo-facts contribution/AI policy and thread highlights, then candidate plan comment and plan. Live: read repository contribution docs, applicable templates and maintainer replies, then drafts and personal voice guide. Good evidence follows explicit requests, includes the required disclosure where applicable, and describes an independent plan in respectful concrete language. Equivalent wording is fine unless a format is expressly required. Other students' comments are context, not the candidate's own proof. No policy in the evidence means do not invent one. Voice rules apply only live; rubric communication rules apply in both modes.
+
+## Readiness versus completion
+
+A plan earns support from observations and controls without already proving every internal step. A mechanism that accounts for the trigger and controls, names a bounded operation, and specifies a discriminating rerun is ready to investigate and build. A directly contradictory control still rejects it. Do not confuse a hypothesis needing implementation-time verification with a hypothesis ruled out by the supplied evidence.
+
+A component and a specific operation can be an executable starting point even when tracing will locate the final function. For example, identifying a lifecycle handshake, the ordering change needed there, the class of input to handle and its safety bound can suffice. “Rewrite the system” without those decisions cannot.
+
+For honesty, distinguish material evidence or permission claims from correctable source attribution. Use the issue, accepted reproduction and thread together for the reported regression window. A small attribution error is preferred-check feedback if the repair remains grounded and permitted after correction. Falsely claiming maintainer approval or completed successful tests is a required failure. Keep advisory corrections visible even when the verdict is accept.

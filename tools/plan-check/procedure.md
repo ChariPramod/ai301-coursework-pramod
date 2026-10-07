@@ -19,7 +19,8 @@
 
 1. Execute every rubric row in order, without short-circuiting after a failure. Assign pass when its stated condition is supported, fail when evidence contradicts it, and unclear when necessary evidence is absent after following the map.
 2. Give each grade one deciding quote or concrete fact with its location. For a non-pass state the smallest correction or evidence needed. Do not invent additional tests, headings, word counts or certainty requirements beyond the rubric.
-3. In live mode compare both drafts against every voice-guide rule. Quote any violated rule and the offending phrase; report these separately unless they also fail a required rubric row.
+3. Before a required non-pass, identify its material effect: does it contradict the observed behavior, prevent a contributor from starting the bounded repair, make validation non-discriminating, or violate an actual policy? An absent implementation trace, exact function name or hypothesis label alone is not a blocker. Check the whole supplied record before calling a version claim unsupported. Route minor wording or attribution corrections to Precise attribution; do not excuse fabricated authorization or test results.
+4. In live mode compare both drafts against every voice-guide rule. Quote any violated rule and the offending phrase; report these separately unless they also fail a required rubric row.
 
 ## Verdict assembly
 

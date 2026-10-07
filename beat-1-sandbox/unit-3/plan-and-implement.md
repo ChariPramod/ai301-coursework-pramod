@@ -130,21 +130,33 @@ The initial broad run had 6 failures from the omitted async plugin and 30 setup 
 
 **Run history**
 
-1. First full attempt: stopped after the four initial Claude calls stalled on Git reads of cloud-evicted files. No verdict table or agreement score was produced, so this is an interrupted execution, not a scored calibration result. No rubric changes followed.
-2. Full official Sonnet run from the temporary local starter checkout, four workers: `agreement: 18/20 scored items  (bar: 18/20: PASS)`. Category agreement: clear-accept 5/7, scope-creep 4/4, thread-convention 2/2, unbuildable 3/3, wrong-cause 4/4. The harness wrote the submitted `eval-run.txt`; it was copied byte for byte. No scored partial runs were made. The two disagreements were pkg-09 and pkg-14, both false holds; the target and every category floor were met.
+1. The first full attempt stalled while Claude read cloud-evicted Git files. I stopped it before it produced a score and moved the starter checkout to a local temporary directory. No rubric changes were made for this environment problem.
+2. The first completed full run scored **18/20**. It matched clear-accept 5/7, scope-creep 4/4, thread-convention 2/2, unbuildable 3/3 and wrong-cause 4/4. The two disagreements were false holds on pkg-09 and pkg-14.
+3. After revising the rubric, procedure and evidence guide, a targeted run scored **7/7** on pkg-09 and pkg-14 plus pkg-01, pkg-04, pkg-06, pkg-10 and pkg-20. Those additional packages checked that the revision still caught wrong causes, scope creep, unbuildable approaches and both thread/convention cases. This was a partial run, not a replacement for the full evaluation.
+4. The confirming full Sonnet run scored `agreement: 20/20 scored items  (bar: 18/20: PASS)`. Category agreement: clear-accept 7/7, scope-creep 4/4, thread-convention 2/2, unbuildable 3/3 and wrong-cause 4/4. The submitted `eval-run.txt` is the file the official harness wrote, copied without edits. The revised skill also accepted my original plan and comment again.
 
 **Package analysis**
 
-pkg-01: my rubric said **reject**, and the gold label said **reject**. The repro says: "the error is raised by argparse's `parse_args` while consuming positionals; the request items are never handed to HTTPie's item parser." The candidate instead says: "The `REQUEST_ITEM` tokenizer in `httpie/cli/requestitems.py` is the problem." That edit would happen after the observed failure point. The control also parses the same request items when the flag is removed. Reading those observations before the candidate diagnosis makes the contradiction visible; a concrete file name and a tidy test section do not repair it.
+pkg-14: the first rubric said **reject**; the staff label was **accept**. After revision, the rubric said **accept** in both the targeted and full runs.
+
+The plan names a concrete operation: “consuming or draining pending OSC query responses” before pane input is connected. It also limits that operation to “OSC response patterns rather than a time window,” which addresses the risk of eating ordinary keystrokes. Its validation is specific: “5 consecutive SSH reattach cycles with no rgb strings in any pane,” with fresh-create and cache controls.
+
+The first grader treated the missing exact function names and unproven internal sequence as reasons to hold the plan. That asked for too much at the planning stage. The supplied reproduction supports investigating the reattach path, the plan explains how the cache observation fits, and tracing is a reasonable way to locate the final function. The revised check accepts that bounded starting point without requiring a completed patch or an independent trace of every proposed internal step. It would still reject a cause contradicted by a control, as pkg-01 demonstrates.
 
 **Check rationale**
 
 Exact current check:
 
-> | Grounded diagnosis | Issue, thread, repro observations and candidate diagnosis; Diagnosis and grounding | The proposed cause fits the observed trigger, controls, and failure location. It explains the reported behavior without contradicting the repro or ignoring a discriminating observation. An explicitly tentative cause is enough when supported and paired with a concrete verification step before dependent edits. | required |
+> | Grounded diagnosis | Issue, thread, repro observations and candidate diagnosis; Diagnosis and grounding | The proposed cause fits the observed trigger, controls, and failure location. It explains the reported behavior without contradicting the repro or ignoring a discriminating observation. A diagnosis is a working explanation, not a completed root-cause proof: accept a plausible mechanism supported by the trigger and controls, with a concrete way to verify it during implementation. It need not be labelled “hypothesis.” Distinguish a contradictory observation from an unproven implementation detail; only the former, or a missing causal connection, blocks readiness. | required |
 
-I chose this wording instead of asking only whether a plan names a cause and a file. That weaker check would accept pkg-01's plausible-sounding tokenizer change even though the repro never reaches the tokenizer. I also allowed a supported tentative cause with a concrete verification step, because a plan should not need a finished patch to be reviewable. These components were drafted from the supplied assignment and Unit 2 workflow, with AI assistance; no group worksheet contribution is claimed.
+The important change is the distinction between an explanation that still needs verification and one that the reproduction has already ruled out. My first version blurred those cases and held a workable plan. The revised check asks whether the mechanism fits the observations and whether the proposed validation can test it. It does not demand the word “hypothesis,” exact function names or a finished investigation. The procedure now makes that distinction before assigning a required failure, and the evidence guide explains where to look for the supporting controls.
+
+These revisions were made with AI assistance using the supplied assignment and evaluation feedback. No group worksheet participation is claimed.
 
 **Trade-offs**
 
-The conservative evidence checks produced two false holds. In pkg-09, the grader flagged the plan's claim that a collaborator endorsed an option when the quoted endorsement came from a non-collaborator. In pkg-14, it wanted a stronger account of the cache control and a more specific starting point before accepting the handshake repair. Staff accepted both. This version therefore risks holding a workable plan whose technical inference or attribution is less explicit. I kept that limitation visible instead of reporting perfect agreement or changing rules solely to match two answers. Every rejection category was recognized, and five clear accepts still passed; the exact per-check decisions are saved in `eval-results.json`.
+Accepting a supported working explanation means some plans will need adjustment when implementation reveals more detail. That is a reasonable cost at this stage: the required scope and test checks still demand a bounded change and a result that distinguishes broken from fixed.
+
+I also separated minor attribution corrections from material honesty failures. In pkg-09, correcting who described an option as simpler does not change the proposed repair or its permission to proceed, so the new preferred `Precise attribution` check records that feedback without holding the plan. False maintainer approval, invented successful tests and concealed blockers still fail the required honesty check.
+
+The targeted canaries stayed correct at 7/7, and the full run then matched all 20 packages. That supports this revision on the supplied set; it does not establish perfect grading on unseen plans.
