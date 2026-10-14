@@ -1,0 +1,887 @@
+{
+  "tool_dir": "/Users/avinya_anveshan_arohana/.claude/skills/pr-precheck",
+  "model": "sonnet",
+  "agreement": [
+    20,
+    20
+  ],
+  "results": [
+    {
+      "id": "pkg-01",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Accurate claims",
+        "Repository standards and communication"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Plan says check capacity in the bulk-copy paths; the diff adds one guard at tokenize_bytes entry (hunk @@ -1096) with no deviation note, while the description claims 'a capacity check to the bulk-copy path'."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Repro before/after shows 99999 -> 100000 with (41, 5000); ASAN report on main, none on the branch; parser suite '2841 passed, 40 skipped' including the new test."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Only two hunks: the tokenizer.c guard and test_short_rows_before_wide_field; no debug output, stray files or unrelated cleanup."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description says the stream is regrown 'when padding has consumed the reservation' in the 'bulk-copy path', but the diff places the check at function entry, before any padding in that call."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "fail",
+          "evidence": "Template requires 'closes #xxxx', a whatsnew entry and recorded pre-commit/code checks; the description has no issue link, the diff has no whatsnew change, and no pre-commit result is recorded."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description points to 'test evidence below', which ties the repro, ASAN run and suite results directly to the claimed fix and the new test."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "standards-wall",
+      "calibration": false
+    },
+    {
+      "id": "pkg-02",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff changes save_text, save_html and save_svg to export with clear=False and clear after the write, plus test and CHANGELOG, matching the plan's three-method one-file scope and non-goals."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Issue repro shows '' before and 'IMPORTANT OUTPUT\\n' after the failed save; new test covers the success-path clear; 'pytest tests/ -q passes (1462 passed, 12 skipped)'."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Every hunk is the repair, a regression test or the CHANGELOG entry; no debug code, unrelated cleanup or accidental files; single commit."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description's claim that all three save_* methods clear only after a successful write matches the diff; no html/svg test coverage is claimed and no recorded output contradicts it."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Template asks (type-of-changes, CHANGELOG entry) are satisfied: 'Type of changes: Bug fix.' and the CHANGELOG diff links #4208; no AI policy stated, none invented."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description points to #4208 and the test evidence shows the before/after repro that maps to the diff hunks."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-03",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Reviewable diff",
+        "Accurate claims"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Plan excludes 'any config surface change', but the diff adds `resolve_symlinks` to DirectoryConfig and rewrites `truncate`; description claims 'Implements the posted plan exactly'."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Repro at symlink: before '(empty)', after '~/projects/app-dir'; physical path unchanged; `cargo test directory` passes (34 tests)."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "Commits 5b77a1f 'refactor(directory): simplify truncation helpers' and c2ee8d8 'add resolve_symlinks option' are unrelated to the #7648 repair."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "'No other behavior changes' and 'exactly' are contradicted by the rewritten `truncate` and the new `resolve_symlinks` config field."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Conventional-commit title, 'Closes #7648' under Motivation and Context, and a How Has This Been Tested section; no AI policy stated."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description points to 'evidence below' and the Test evidence section shows the decisive before/after output."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "silent-drift",
+      "calibration": false
+    },
+    {
+      "id": "pkg-04",
+      "verdict": "reject",
+      "failed_checks": [
+        "Observable verification",
+        "Accurate claims",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff adds `None if cfg!(windows) => vec![\"--RAW-CONTROL-CHARS\"]` in src/pager.rs plus one unit test and a CHANGELOG entry, matching the plan's single bounded change"
+        },
+        {
+          "name": "Observable verification",
+          "grade": "fail",
+          "evidence": "Test evidence is only \"colors work now in paging mode. `cargo test` passes.\" with no commands, before/after contrast or observed output"
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "All hunks are the fallback arm, a Windows-only regression test and the CHANGELOG line; no debug code or stray files"
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description says fallback is \"the same flag set the successful probe path uses\", but diff gives only --RAW-CONTROL-CHARS while success paths add --quit-if-one-screen or --no-init"
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "No template or AI policy in repo facts; the asked-for test and CHANGELOG entry (citing #3833) are both present"
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "Claims 'colors work now' and 'cargo test passes' point to no decisive output a reviewer can follow"
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "not-tested",
+      "calibration": false
+    },
+    {
+      "id": "pkg-05",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff widens the match to name+mode+modifier+keycode and adds warn_once on replace, exactly as planned; no extra or missing hunks; description agrees."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Issue repro before (only 'up' row) vs after (control char_r + none up rows); cargo test -p nu-protocol 312 pass, fmt/clippy clean; unit test asserts the same-key warning."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Only merge_keybindings change and two regression tests; no debug, unrelated cleanup or stray files; two focused commits."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Claims of both bindings surviving and a one-time warning on same-key replace are backed by the diff, the after-table and the tests; no contradiction in the supplied record."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Description covers problem/approach/technical details plus a User-facing changes section, links #18848, no AI policy to satisfy, and responds to maintainer comments without blame."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Claims map to named tests, the merge hunk and the before/after tables."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-06",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Reviewable diff",
+        "Accurate claims",
+        "Repository standards and communication",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Plan scopes to IslandWindow.cpp/.h and excludes settings surface and theme plumbing, but the diff renames members (commit b3c50f8) and adds Boolean MenuFollowsWindowTheme to GlobalAppSettings.idl (commit 06f14dd), undisclosed."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Test evidence: alt+space under system dark + Terminal dark shows a dark menu, switching to light flips it on next open, before/after screenshots attached, Terminal.Unit.Tests 0 failures."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "Initialize() hunk renames _themeChangedRevoker/_makeFrameBrush to _themeRevoker/_MakeChromeBrush and the IDL hunk adds an unrelated setting; neither serves the system-menu repair."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description says \"No functional changes outside the system menu fix\" but the diff adds a new MenuFollowsWindowTheme setting."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "fail",
+          "evidence": "PR Checklist says \"schema n/a\" although the PR adds a new setting (experimental.menuFollowsWindowTheme); template sections and closes #20507 are otherwise present."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "Description's \"evidence below\" has no linked screenshots, and the rename and setting hunks are never mentioned or tied to a claim."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "silent-drift",
+      "calibration": false
+    },
+    {
+      "id": "pkg-07",
+      "verdict": "reject",
+      "failed_checks": [
+        "Observable verification",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff groups edits via editsByFile[f.Name()] and warns/skips on nil file, matching the plan's single bounded change in pkg/goanalysis; description agrees."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "fail",
+          "evidence": "Plan requires the two-file repro with go build ./...; the only run is 'a single-file case' (the control), and the unit test uses only a.go:3 and a.go:9 with require.Len(groups, 1), so no cross-file before/after is shown."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "All hunks are the fix in runner_fix.go plus a regression test; no debug output, stray files or unrelated cleanup."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description claims only grouping and skip-with-warning; test evidence honestly says 'single-file case'; no demonstrated contradiction in the record."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Repo facts require only a brief description (present), state no AI policy or issue-link rule, and the PR is not a linter-update PR."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "The cross-file claim has no decisive output; the evidence listed covers only a single-file run and a one-file unit test."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "not-tested",
+      "calibration": false
+    },
+    {
+      "id": "pkg-08",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff touches only files_controller.go, english.go and one integration test, matching the plan's three files. Adds the AnyTrackedChanges guard before the prompt; no semantics change or fallback flow."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Records before/after repro (prompt vs. toast, file untouched), a tracked-change control, and results for the integration test, go test ./... and go generate ./... (no cheatsheet diff)."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Every hunk is the guard, its i18n string or the regression test; no debug output, dead code, unrelated cleanup or stray files."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description claims (guard before prompt, toast, test added, i18n, cheatsheets with no diff, no UserConfig changes) match the diff and the recorded outcomes; no demonstrated contradiction."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Has a PR Description and a requirements checklist with substantive answers, links #5883, and the repo states no AI policy, so no disclosure is required."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description cites #5883 and the plan; each claim maps to a diff hunk or a test-evidence line."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-09",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Reviewable diff",
+        "Accurate claims",
+        "Repository standards and communication",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Diff adds `--time-format` flag, reworded help text and global `trim_end_matches('.')` in error.rs, all out of plan scope, while the description says 'exactly as planned'"
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Repro re-run shows distinct out-of-range vs format wording for 2025-11-31 and yesterdayy against the plan's generic-message baseline; cargo test passes (612 tests)"
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "Unrelated hunks: `--time-format` option, help-string rewording, error.rs period trimming; commits 7a95d33 and 3d0c6b1 are off-issue"
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "'CHANGELOG entry added' but the diff touches no CHANGELOG; 'exactly as planned' contradicted by extra flag and global message change"
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "fail",
+          "evidence": "Contribution guide requires tests and a CHANGELOG.md entry; the diff contains neither (no test hunks, no CHANGELOG file)"
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "Description gives no pointer to the claimed CHANGELOG entry or tests, and does not mention the extra hunks a reviewer would find"
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "silent-drift",
+      "calibration": false
+    },
+    {
+      "id": "pkg-10",
+      "verdict": "reject",
+      "failed_checks": [
+        "Observable verification",
+        "Repository standards and communication",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff sets autoSelectFamilyAttemptTimeout: 2000 on the http/https agents in shim-init-node.ts plus one unit test; matches the plan's files and keeps Happy Eyeballs enabled; description agrees."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "fail",
+          "evidence": "Only 'a full day of WebDAV syncs... The change is a two-line agent option, so no further testing seemed necessary'; no delayed-connect repro before/after and no yarn test result recorded."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Two hunks (agent option plus a regression test), no debug code, unrelated cleanup or stray files; single commit 5d19c02."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "'Verified working' rests on a day of anecdotal syncing, which is not contradicted by the package; the description claims no test-suite or repro result and the evidence admits no further testing."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "unclear",
+          "evidence": "Links 'Fixes #16215', but the contributing guide asks PRs to pass 'yarn test' and no yarn test outcome is recorded."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "The 'verified working' claim cites no command, output or diff location a reviewer can check."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "not-tested",
+      "calibration": false
+    },
+    {
+      "id": "pkg-11",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff replaces trim_end_matches(' ') with trim_unescaped_trailing_spaces stopping at odd-backslash space, plus a test in the same file, matching the plan's one bounded change and file list."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Repro printf 'foo\\\\   \\n' shows the before error 'dangling \\'', then no error after and 'foo ' not listed by rg --files; cargo test -p ignore passes (214 tests)."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "One commit, three hunks (call site, helper, test); no debug output, dead code, stray files or unrelated formatting."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description's trim behavior and tests match the diff; the 'one function touched' and 'unescaped case' wording is loose but no demonstrated contradiction."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "No PR template; links #3477, includes tests, is focused; states AI-assisted with human review and own words, as the supplied AI policy asks."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description cites #3477 and the cases; test evidence mirrors the plan's repro and outcome."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-12",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Reviewable diff",
+        "Accurate claims",
+        "Repository standards and communication"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Diff adds unused `_unused_buffer_probe`, commented debug `eprintln!`, TODO on the import and a whitespace-only while-loop hunk; none are in the plan or deviations, yet the description says it follows the posted plan."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Repro with the issue's exact input now prints l1/l2 and exit 0 (before: capacity overflow, exit 101), plus a regression test asserting success and stdout."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "Commented-out `// eprintln!(\"DBG buffer_size ...\")`, commented-out alternate allocation, dead `_unused_buffer_probe` fn and a no-op reformat hunk bury the bounded repair."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description says \"regression test and CHANGELOG entry included\" but the diff changes only src/controller.rs and tests/integration_tests.rs."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "fail",
+          "evidence": "Repo facts: the contribution guide asks for a CHANGELOG.md entry with behavior changes; the diff contains none."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Repro and its output are in the Test evidence section and the regression test is visible in the diff; only the CHANGELOG claim is untraceable."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "unreviewable",
+      "calibration": false
+    },
+    {
+      "id": "pkg-13",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff caret-escapes `& | ^ < >` via path:gsub('[&|^<>]', '^%0') in ui.lua plus one ui_spec test, matching the plan's scope and files; %VAR% deferral is stated in both plan and description."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Repro on Windows 11 shows before {code=1, stderr \"'t' is not recognized\"} vs after {code=0, stderr=\"\"} with full URL opened; ui_spec functionaltest recorded as passing including the new case."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Two files, one commit; every hunk is the escape fix, its explanatory comment, or the regression test; no debug output, dead code or unrelated cleanup."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description says `?q=%PATH%` still expands and claims only metacharacter escaping, which matches the diff; no CI or approval claimed; test claims match recorded outputs."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Description has substantive Problem and Solution sections per template, references #41337, uses `fix(ui):` title; no AI policy exists in repo facts so none is imposed."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Test evidence block pairs the repro command with before/after output, and the diff comment cites #41337 and the plan's deferral note."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-14",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Observable verification",
+        "Reviewable diff",
+        "Accurate claims",
+        "Repository standards and communication",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Only test added is test_header_casing_preserved, but the plan lists header casing as out of scope and no Content-Type regression test is delivered; the description says only 'Tests added'."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "fail",
+          "evidence": "Test evidence is a GET /headers with X-Custom-Header showing casing; neither repro command nor any before/after Content-Type result is shown, and 'All tests pass' has no command or result."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "The tests/test_httpie.py hunk (header casing test) does not serve the single-header Content-Type repair."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "'Tests added; all tests pass' implies the fix is covered, but the only added test and the only evidence concern casing, an unrelated path; no recorded result supports the Content-Type fix."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "fail",
+          "evidence": "Contribution docs ask for tests with changes and a passing suite; the added test is unrelated to the fix and the suite result is only asserted."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "No claim about Content-Type can be connected to a diff hunk or decisive output; the evidence points only at casing."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "not-tested",
+      "calibration": false
+    },
+    {
+      "id": "pkg-15",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Reviewable diff",
+        "Accurate claims"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Planned unit test on the limit-raise helper is absent from the diff, while unplanned import reorder, dead count_open_fds, DEBUG eprintln and reformat are added; description says 'per the posted plan' and discloses neither."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "ulimit -n 64 repro with 6 new-tab commands: before panic on 4th tab, after all 6 tabs and log 'raised fd soft limit 64 -> unlimited'; forced-low control keeps server up; cargo test -p zellij-server recorded as passing."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "Diff includes eprintln!(\"DEBUG accept err = {:?}\"), commented-out lsof/log lines, #[allow(dead_code)] count_open_fds, import reordering, and an unrelated ClientAttributes reformat; commit 8ff41d2 'misc cleanups while debugging'."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description claims implementation 'per the posted plan' but the plan's unit test is missing and undisclosed extra changes (debug output, dead code, reformat) ship in the diff."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "No template or AI policy; description has 'Fixes #5474' and states cargo test -p zellij-server passes, matching the contribution docs' asks."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description points to 'Repro evidence below' and the test-evidence section maps directly to the two changes."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "unreviewable",
+      "calibration": false
+    },
+    {
+      "id": "pkg-16",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff adds aggregated error only when len(succeeded)==0, exit.Error in cmd/image.go, and the planned unit test; start-path deferral stated in both plan and description."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Recorded repro after: corrupt tarball prints error with exit 1; valid alpine.tar control exits 0 and the image is in the guest; `go test ./pkg/minikube/machine/... ./cmd/...` passes."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Three hunks (core aggregation, command surfacing, one regression test) with no debug, dead code or unrelated cleanup; two focused commits."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description's 'aggregated error when all target machines failed' matches the diff, and the before/after matches the test-evidence transcript; no demonstrated contradiction."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Has 'fixes #23471', a release-note-style title and before/after examples; no AI policy is stated and none is invented; the thread's multi-node direction is reported faithfully."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Description's before/after, the test-evidence transcript and the diff hunks map directly to each claim."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-17",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Accurate claims",
+        "Navigable evidence"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Plan's deliverable (2) is a docs update; diff touches only reactive.ts and reactive.spec.ts, yet description says 'Implements the plan on #14893 in full'."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Dev repro of reactive(Object.seal({ useDarkTheme: null })) shows the [Vue warn]; 'pnpm test reactivity passes (511 tests)' with sealed/frozen tests added."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Only a guarded warn() in createReactiveObject plus two regression tests; no debug, unrelated cleanup or stray files."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description says 'the reactivity-core documentation now documents the limitation' but the diff contains no docs change."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "No PR template or AI policy; conventional-commit title 'fix(reactivity): \u2026', tests included, issue #14893 referenced."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "fail",
+          "evidence": "The docs claim in the description maps to no hunk or output in the package."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "silent-drift",
+      "calibration": false
+    },
+    {
+      "id": "pkg-18",
+      "verdict": "reject",
+      "failed_checks": [
+        "Plan fidelity",
+        "Reviewable diff"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "fail",
+          "evidence": "Diff rewrites the use-import block in src/command.rs and reformats println hunks (commit 'fmt pass on command.rs'); neither is in the plan nor the description"
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "grep -c of escape sequences on `nu --help | cat -v`: 214 before, 0 after; tty still colored; cargo test/fmt/clippy recorded clean"
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "fail",
+          "evidence": "Commented-out debug line `// eprintln!(\"help colors: tty={}\", ...)` left in, plus unrelated import reordering and println churn"
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description's gating on is_terminal() and use-colors out-of-scope match the diff and plan; no demonstrated contradiction"
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "Description has problem/approach and a User-facing changes section, references #18850; no AI policy stated in repo facts"
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Claims map directly to the gating hunk, the new test, and the grep before/after output"
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "unreviewable",
+      "calibration": false
+    },
+    {
+      "id": "pkg-19",
+      "verdict": "accept",
+      "failed_checks": [],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff removes the indention/whitespace reset at the break-writing site in the single-quoted writer plus one round-trip test, which are the two files and the one change the plan scoped; the description says the same."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Before output shows the dedented closing quote; after output is identical to the input (`diff ... && echo IDENTICAL` prints IDENTICAL); `go test ./...` passes (4108 tests)."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "One commit, two files, and each hunk is either the planned emitter fix or its regression test; no debug output or unrelated changes."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "pass",
+          "evidence": "Description's claims (reset removed at the break site, matches double-quoted handling, regression test added) agree with the diff and its comment; no claim contradicts the recorded results."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "pass",
+          "evidence": "No template or AI policy exists; the contribution docs ask for tests with fixes and a regression test is added; the description links #2819."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "The description's claims map directly to the quoted diff and the before/after commands in the test evidence."
+        }
+      ],
+      "error": null,
+      "gold": "accept",
+      "category": "clear-accept",
+      "calibration": false
+    },
+    {
+      "id": "pkg-20",
+      "verdict": "reject",
+      "failed_checks": [
+        "Accurate claims",
+        "Repository standards and communication"
+      ],
+      "checks": [
+        {
+          "name": "Plan fidelity",
+          "grade": "pass",
+          "evidence": "Diff touches only changeConditionalState (guard now `key != .theme and !contains(key)`) and its tests, matching the plan's single bounded change; the extra unrelated-key test is small regression coverage."
+        },
+        {
+          "name": "Observable verification",
+          "grade": "pass",
+          "evidence": "Test evidence gives the isolated command and query with before `ESC[?997;2n` and after `ESC[?997;1n`; the control and `zig build test` are only asserted, but the core repro is observable."
+        },
+        {
+          "name": "Reviewable diff",
+          "grade": "pass",
+          "evidence": "Two hunks in Config.zig, one commit, no debug output, dead code or unrelated cleanup."
+        },
+        {
+          "name": "Accurate claims",
+          "grade": "fail",
+          "evidence": "Description says 'a second case covers the single-theme scheme flip', but the added second test is 'still ignores unrelated keys' (.fullscreen = true); the flip is the updated first test."
+        },
+        {
+          "name": "Repository standards and communication",
+          "grade": "unclear",
+          "evidence": "Policy requires disclosing all AI usage (tool and extent, or explicitly none); the description is silent on AI."
+        },
+        {
+          "name": "Navigable evidence",
+          "grade": "pass",
+          "evidence": "Claims connect to the diff hunks and the short repro transcript without searching other artifacts."
+        }
+      ],
+      "error": null,
+      "gold": "reject",
+      "category": "standards-wall",
+      "calibration": false
+    }
+  ]
+}
